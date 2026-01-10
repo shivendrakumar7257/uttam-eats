@@ -6,60 +6,60 @@
 
 @layer base {
   :root {
-    /* Warm Indian Restaurant Theme */
-    --background: 30 25% 97%;
-    --foreground: 20 20% 15%;
+    /* Elegant Indian Restaurant Theme - Deep Burgundy & Gold */
+    --background: 30 20% 98%;
+    --foreground: 350 30% 15%;
 
-    --card: 30 30% 99%;
-    --card-foreground: 20 20% 15%;
+    --card: 30 25% 99%;
+    --card-foreground: 350 30% 15%;
 
-    --popover: 30 30% 99%;
-    --popover-foreground: 20 20% 15%;
+    --popover: 30 25% 99%;
+    --popover-foreground: 350 30% 15%;
 
-    /* Saffron Orange Primary */
-    --primary: 24 95% 53%;
+    /* Deep Burgundy Primary */
+    --primary: 350 65% 35%;
     --primary-foreground: 0 0% 100%;
 
     /* Warm Cream Secondary */
-    --secondary: 35 40% 92%;
-    --secondary-foreground: 20 20% 20%;
+    --secondary: 35 35% 93%;
+    --secondary-foreground: 350 30% 20%;
 
     /* Muted Warm Tones */
-    --muted: 30 20% 94%;
-    --muted-foreground: 20 15% 45%;
+    --muted: 30 15% 94%;
+    --muted-foreground: 350 15% 45%;
 
-    /* Golden Accent */
-    --accent: 43 96% 56%;
-    --accent-foreground: 20 20% 15%;
+    /* Rich Gold Accent */
+    --accent: 38 80% 50%;
+    --accent-foreground: 350 30% 15%;
 
-    /* Deep Maroon for Destructive */
+    /* Deep Red for Destructive */
     --destructive: 0 72% 45%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 30 20% 88%;
-    --input: 30 20% 88%;
-    --ring: 24 95% 53%;
+    --border: 30 15% 88%;
+    --input: 30 15% 88%;
+    --ring: 350 65% 35%;
 
     --radius: 0.75rem;
 
     /* Custom Colors */
-    --saffron: 24 95% 53%;
-    --maroon: 0 60% 30%;
-    --gold: 43 96% 56%;
-    --cream: 35 40% 96%;
-    --spice: 15 80% 40%;
-    --curry: 40 90% 50%;
+    --saffron: 38 80% 50%;
+    --maroon: 350 65% 25%;
+    --gold: 38 80% 50%;
+    --cream: 35 35% 96%;
+    --spice: 350 60% 35%;
+    --curry: 38 80% 50%;
 
     /* Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(24 95% 53% / 0.95), hsl(0 60% 30% / 0.9));
-    --gradient-card: linear-gradient(180deg, hsl(30 30% 99%), hsl(35 40% 96%));
-    --gradient-gold: linear-gradient(135deg, hsl(43 96% 56%), hsl(35 90% 45%));
+    --gradient-hero: linear-gradient(135deg, hsl(350 65% 35% / 0.95), hsl(350 65% 25% / 0.9));
+    --gradient-card: linear-gradient(180deg, hsl(30 25% 99%), hsl(35 35% 96%));
+    --gradient-gold: linear-gradient(135deg, hsl(38 80% 50%), hsl(38 70% 40%));
     
     /* Shadows */
-    --shadow-sm: 0 2px 8px hsl(20 20% 15% / 0.06);
-    --shadow-md: 0 4px 16px hsl(20 20% 15% / 0.08);
-    --shadow-lg: 0 8px 32px hsl(20 20% 15% / 0.12);
-    --shadow-glow: 0 0 40px hsl(24 95% 53% / 0.2);
+    --shadow-sm: 0 2px 8px hsl(350 30% 15% / 0.06);
+    --shadow-md: 0 4px 16px hsl(350 30% 15% / 0.08);
+    --shadow-lg: 0 8px 32px hsl(350 30% 15% / 0.12);
+    --shadow-glow: 0 0 40px hsl(350 65% 35% / 0.2);
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -72,33 +72,33 @@
   }
 
   .dark {
-    --background: 20 15% 10%;
+    --background: 350 20% 8%;
     --foreground: 30 20% 95%;
 
-    --card: 20 15% 12%;
+    --card: 350 20% 10%;
     --card-foreground: 30 20% 95%;
 
-    --popover: 20 15% 12%;
+    --popover: 350 20% 10%;
     --popover-foreground: 30 20% 95%;
 
-    --primary: 24 95% 55%;
+    --primary: 350 60% 45%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 20 15% 18%;
+    --secondary: 350 15% 15%;
     --secondary-foreground: 30 20% 90%;
 
-    --muted: 20 15% 20%;
+    --muted: 350 15% 18%;
     --muted-foreground: 30 15% 60%;
 
-    --accent: 43 96% 50%;
-    --accent-foreground: 20 20% 10%;
+    --accent: 38 80% 50%;
+    --accent-foreground: 350 20% 10%;
 
     --destructive: 0 62.8% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 20 15% 20%;
-    --input: 20 15% 20%;
-    --ring: 24 95% 55%;
+    --border: 350 15% 18%;
+    --input: 350 15% 18%;
+    --ring: 350 60% 45%;
 
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
