@@ -1,10 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { X, Plus, Minus, Trash2, ShoppingBag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
-import { cn } from '@/lib/utils';
 
 const CartSidebar: React.FC = () => {
+  const navigate = useNavigate();
   const {
     items,
     isCartOpen,
@@ -16,6 +17,14 @@ const CartSidebar: React.FC = () => {
   } = useCart();
 
   if (!isCartOpen) return null;
+
+  const deliveryFee = totalPrice >= 500 ? 0 : 40;
+  const grandTotal = totalPrice + deliveryFee;
+
+  const handleCheckout = () => {
+    setIsCartOpen(false);
+    navigate('/checkout');
+  };
 
   return (
     <>
@@ -154,21 +163,31 @@ const CartSidebar: React.FC = () => {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Delivery</span>
-                  <span className="text-green-600">Free</span>
+                  <span className={deliveryFee === 0 ? 'text-green-600' : ''}>
+                    {deliveryFee === 0 ? 'FREE' : `₹${deliveryFee}`}
+                  </span>
                 </div>
+                {deliveryFee > 0 && (
+                  <p className="text-xs text-muted-foreground">
+                    Free delivery on orders above ₹500
+                  </p>
+                )}
                 <div className="flex justify-between text-lg font-bold pt-2 border-t border-border">
                   <span>Total</span>
-                  <span className="text-primary">₹{totalPrice}</span>
+                  <span className="text-primary">₹{grandTotal}</span>
                 </div>
               </div>
 
               {/* Checkout Button */}
-              <Button className="w-full h-12 btn-primary-glow text-lg font-semibold">
+              <Button 
+                onClick={handleCheckout}
+                className="w-full h-12 btn-primary-glow text-lg font-semibold"
+              >
                 Proceed to Checkout
               </Button>
 
               <p className="text-xs text-center text-muted-foreground">
-                🔒 Secure checkout powered by Razorpay
+                🔒 Secure checkout
               </p>
             </div>
           )}

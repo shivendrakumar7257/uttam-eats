@@ -1,13 +1,22 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingCart, Menu, X } from 'lucide-react';
+import { ShoppingCart, Menu, X, User, Package, LogIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
+import { useAuth } from '@/context/AuthContext';
 import { cn } from '@/lib/utils';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 const Navbar: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { totalItems, setIsCartOpen } = useCart();
+  const { user, signOut } = useAuth();
   const location = useLocation();
 
   const navLinks = [
@@ -18,6 +27,10 @@ const Navbar: React.FC = () => {
   ];
 
   const isActive = (path: string) => location.pathname === path;
+
+  const handleLogout = async () => {
+    await signOut();
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
@@ -62,7 +75,7 @@ const Navbar: React.FC = () => {
             </div>
 
             {/* Right Side */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               {/* Cart Button */}
               <Button
                 variant="ghost"
@@ -77,6 +90,41 @@ const Navbar: React.FC = () => {
                   </span>
                 )}
               </Button>
+
+              {/* User Menu */}
+              {user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" className="relative">
+                      <User className="w-5 h-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuItem asChild>
+                      <Link to="/profile" className="flex items-center gap-2">
+                        <User className="w-4 h-4" />
+                        My Profile
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/orders" className="flex items-center gap-2">
+                        <Package className="w-4 h-4" />
+                        My Orders
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleLogout} className="text-destructive">
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Link to="/auth">
+                  <Button variant="ghost" size="icon">
+                    <LogIn className="w-5 h-5" />
+                  </Button>
+                </Link>
+              )}
 
               {/* Order Now Button */}
               <Link to="/menu" className="hidden sm:block">
@@ -121,6 +169,32 @@ const Navbar: React.FC = () => {
                   {link.name}
                 </Link>
               ))}
+              {user ? (
+                <>
+                  <Link
+                    to="/profile"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="text-base font-medium py-2 text-foreground/70"
+                  >
+                    My Profile
+                  </Link>
+                  <Link
+                    to="/orders"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="text-base font-medium py-2 text-foreground/70"
+                  >
+                    My Orders
+                  </Link>
+                </>
+              ) : (
+                <Link
+                  to="/auth"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="text-base font-medium py-2 text-foreground/70"
+                >
+                  Login / Sign Up
+                </Link>
+              )}
               <Link to="/menu" onClick={() => setIsMobileMenuOpen(false)}>
                 <Button className="w-full btn-primary-glow">
                   Order Now
