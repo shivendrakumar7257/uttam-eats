@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingCart, Menu, X, User, Package, LogIn } from 'lucide-react';
+import { ShoppingCart, Menu, X, User, Package, LogIn, LayoutDashboard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
+import { useAdminCheck } from '@/hooks/useAdminCheck';
 import { cn } from '@/lib/utils';
 import {
   DropdownMenu,
@@ -17,6 +18,7 @@ const Navbar: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { totalItems, setIsCartOpen } = useCart();
   const { user, signOut } = useAuth();
+  const { isAdmin } = useAdminCheck();
   const location = useLocation();
 
   const navLinks = [
@@ -112,6 +114,17 @@ const Navbar: React.FC = () => {
                         My Orders
                       </Link>
                     </DropdownMenuItem>
+                    {isAdmin && (
+                      <>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem asChild>
+                          <Link to="/admin" className="flex items-center gap-2 text-primary">
+                            <LayoutDashboard className="w-4 h-4" />
+                            Admin Dashboard
+                          </Link>
+                        </DropdownMenuItem>
+                      </>
+                    )}
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleLogout} className="text-destructive">
                       Logout
