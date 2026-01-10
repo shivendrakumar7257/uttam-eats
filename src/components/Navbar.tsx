@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingCart, Menu, X, Phone, MapPin } from 'lucide-react';
+import { ShoppingCart, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
 import { cn } from '@/lib/utils';
@@ -21,26 +21,6 @@ const Navbar: React.FC = () => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
-      {/* Top Bar */}
-      <div className="bg-primary text-primary-foreground py-2">
-        <div className="container mx-auto px-4 flex justify-between items-center text-sm">
-          <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1">
-              <Phone className="w-3 h-3" />
-              +91 98765 43210
-            </span>
-            <span className="hidden sm:flex items-center gap-1">
-              <MapPin className="w-3 h-3" />
-              Free delivery within 5km
-            </span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-primary-foreground/80">Open:</span>
-            <span>11:00 AM - 11:00 PM</span>
-          </div>
-        </div>
-      </div>
-
       {/* Main Navbar */}
       <nav className="glass border-b border-border/50">
         <div className="container mx-auto px-4">
