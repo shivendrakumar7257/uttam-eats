@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { Eye, EyeOff, Mail, Lock, User, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -25,6 +27,7 @@ const signupSchema = z.object({
 
 const Auth: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [loginTab, setLoginTab] = useState<'user' | 'admin'>('user');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -78,8 +81,30 @@ const Auth: React.FC = () => {
             toast.error(error.message);
           }
         } else {
-          toast.success('Welcome back!');
-          navigate('/');
+          if (loginTab === 'admin') {
+            // Verify admin role
+            const { data: { user: currentUser } } = await supabase.auth.getUser();
+            if (currentUser) {
+              const { data: roleData } = await supabase
+                .from('user_roles')
+                .select('role')
+                .eq('user_id', currentUser.id)
+                .eq('role', 'admin')
+                .maybeSingle();
+              
+              if (!roleData) {
+                await supabase.auth.signOut();
+                toast.error('You do not have admin access.');
+                setIsLoading(false);
+                return;
+              }
+            }
+            toast.success('Welcome, Admin!');
+            navigate('/admin');
+          } else {
+            toast.success('Welcome back!');
+            navigate('/');
+          }
         }
       } else {
         const result = signupSchema.safeParse(formData);
@@ -131,6 +156,20 @@ const Auth: React.FC = () => {
             {isLogin ? 'Welcome back! Please sign in.' : 'Create your account to get started.'}
           </p>
         </div>
+
+        {/* Login Type Tabs */}
+        {isLogin && (
+          <Tabs value={loginTab} onValueChange={(v) => { setLoginTab(v as 'user' | 'admin'); setErrors({}); }} className="mb-6">
+            <TabsList className="w-full grid grid-cols-2">
+              <TabsTrigger value="user" className="gap-2">
+                <User className="w-4 h-4" /> User Login
+              </TabsTrigger>
+              <TabsTrigger value="admin" className="gap-2">
+                <Shield className="w-4 h-4" /> Admin Login
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+        )}
 
         {/* Form Card */}
         <div className="bg-card border border-border rounded-2xl p-8 shadow-lg">
@@ -232,20 +271,26 @@ const Auth: React.FC = () => {
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-muted-foreground">
-              {isLogin ? "Don't have an account?" : 'Already have an account?'}
-              <button
-                type="button"
-                onClick={() => {
-                  setIsLogin(!isLogin);
-                  setErrors({});
-                  setFormData({ fullName: '', email: '', password: '', confirmPassword: '' });
-                }}
-                className="ml-2 text-primary font-semibold hover:underline"
-              >
-                {isLogin ? 'Sign Up' : 'Sign In'}
-              </button>
-            </p>
+            {loginTab === 'admin' ? (
+              <p className="text-muted-foreground text-sm">
+                Admin access only. Contact support if you need access.
+              </p>
+            ) : (
+              <p className="text-muted-foreground">
+                {isLogin ? "Don't have an account?" : 'Already have an account?'}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsLogin(!isLogin);
+                    setErrors({});
+                    setFormData({ fullName: '', email: '', password: '', confirmPassword: '' });
+                  }}
+                  className="ml-2 text-primary font-semibold hover:underline"
+                >
+                  {isLogin ? 'Sign Up' : 'Sign In'}
+                </button>
+              </p>
+            )}
           </div>
         </div>
       </div>
