@@ -76,8 +76,10 @@ const Auth: React.FC = () => {
 
         const { error } = await signIn(formData.email, formData.password);
         if (error) {
-          if (error.message.includes('Invalid login credentials')) {
+          if (error.message.includes('Invalid login credentials') || error.message.includes('invalid_credentials')) {
             toast.error('Invalid email or password');
+          } else if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+            toast.error('Network error. Please check your internet connection.');
           } else {
             toast.error(error.message);
           }
@@ -133,8 +135,12 @@ const Auth: React.FC = () => {
           navigate('/');
         }
       }
-    } catch (err) {
-      toast.error('An unexpected error occurred');
+    } catch (err: any) {
+      if (err?.message?.includes('Failed to fetch') || err?.message?.includes('NetworkError') || err?.message?.includes('fetch')) {
+        toast.error('Network error. Please check your internet connection and try again.');
+      } else {
+        toast.error('An unexpected error occurred. Please try again.');
+      }
     } finally {
       setIsLoading(false);
     }
