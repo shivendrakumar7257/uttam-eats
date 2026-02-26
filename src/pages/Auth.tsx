@@ -41,11 +41,12 @@ const Auth: React.FC = () => {
   const { signIn, signUp, user } = useAuth();
   const navigate = useNavigate();
 
+  // Only redirect if already logged in when page loads (not after form submit)
   useEffect(() => {
-    if (user) {
+    if (user && !isLoading) {
       navigate('/');
     }
-  }, [user, navigate]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
