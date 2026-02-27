@@ -38,7 +38,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return () => subscription.unsubscribe();
   }, []);
 
-  const withRetry = async <T,>(fn: () => Promise<T>, retries = 3, delay = 1000): Promise<T> => {
+  const pingSupabase = async () => {
+    try {
+      await supabase.from('profiles').select('id').limit(1);
+    } catch {
+      // ignore ping errors
+    }
+  };
+
+  const withRetry = async <T,>(fn: () => Promise<T>, retries = 5, delay = 2000): Promise<T> => {
     for (let i = 0; i < retries; i++) {
       try {
         return await fn();
@@ -59,6 +67,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signUp = async (email: string, password: string, fullName: string) => {
     try {
+      await pingSupabase();
       const { error } = await withRetry(() => supabase.auth.signUp({
         email,
         password,
@@ -72,6 +81,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signIn = async (email: string, password: string) => {
     try {
+      await pingSupabase();
       const { error } = await withRetry(() => supabase.auth.signInWithPassword({ email, password }));
       return { error };
     } catch (err: any) {
