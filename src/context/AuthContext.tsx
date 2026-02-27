@@ -38,25 +38,45 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string, fullName: string) => {
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          full_name: fullName,
+  const withRetry = async <T,>(fn: () => Promise<T>, retries = 3, delay = 1000): Promise<T> => {
+    for (let i = 0; i < retries; i++) {
+      try {
+        return await fn();
+      } catch (err: any) {
+        const isNetworkError = err?.message?.includes('Failed to fetch') ||
+          err?.message?.includes('NetworkError') ||
+          err?.message?.includes('fetch') ||
+          err?.name === 'TypeError';
+        if (isNetworkError && i < retries - 1) {
+          await new Promise(res => setTimeout(res, delay * (i + 1)));
+          continue;
         }
+        throw err;
       }
-    });
-    return { error };
+    }
+    throw new Error('Max retries reached');
+  };
+
+  const signUp = async (email: string, password: string, fullName: string) => {
+    try {
+      const { error } = await withRetry(() => supabase.auth.signUp({
+        email,
+        password,
+        options: { data: { full_name: fullName } }
+      }));
+      return { error };
+    } catch (err: any) {
+      return { error: new Error('Network error. Please check your connection and try again.') };
+    }
   };
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    return { error };
+    try {
+      const { error } = await withRetry(() => supabase.auth.signInWithPassword({ email, password }));
+      return { error };
+    } catch (err: any) {
+      return { error: new Error('Network error. Please check your connection and try again.') };
+    }
   };
 
   const signOut = async () => {
