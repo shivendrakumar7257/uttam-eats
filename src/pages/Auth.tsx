@@ -41,12 +41,14 @@ const Auth: React.FC = () => {
   const { signIn, signUp, user } = useAuth();
   const navigate = useNavigate();
 
-  // Only redirect if already logged in when page loads (not after form submit)
+  const [redirectTo, setRedirectTo] = useState<string | null>(null);
+
+  // Redirect when user state changes (covers both initial load and post-login)
   useEffect(() => {
     if (user && !isLoading) {
-      navigate('/');
+      navigate(redirectTo || '/');
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [user, isLoading, navigate, redirectTo]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -103,10 +105,10 @@ const Auth: React.FC = () => {
               }
             }
             toast.success('Welcome, Admin!');
-            navigate('/admin');
+            setRedirectTo('/admin');
           } else {
             toast.success('Welcome back!');
-            navigate('/');
+            setRedirectTo('/');
           }
         }
       } else {
@@ -132,7 +134,7 @@ const Auth: React.FC = () => {
           }
         } else {
           toast.success('Account created successfully!');
-          navigate('/');
+          setRedirectTo('/');
         }
       }
     } catch (err: any) {
