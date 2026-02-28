@@ -1,11 +1,13 @@
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, ShoppingCart, BarChart3, Users, ArrowLeft } from 'lucide-react';
+import { LayoutDashboard, ShoppingCart, BarChart3, Receipt, Wallet, ArrowLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
   { to: '/admin', icon: LayoutDashboard, label: 'Dashboard', end: true },
   { to: '/admin/orders', icon: ShoppingCart, label: 'Orders' },
   { to: '/admin/analytics', icon: BarChart3, label: 'Analytics' },
+  { to: '/admin/expenses', icon: Receipt, label: 'Expense Tracker' },
+  { to: '/admin/salary', icon: Wallet, label: 'Salary' },
 ];
 
 const AdminSidebar = () => {
